@@ -1,28 +1,26 @@
 <template>
   <div class="movie_body">
     <ul>
-        <li>
+        <!-- <li>
             <div class="pic_show">
             <img src="/image/pic3.jpg"></div>
             <div class="info_list">
-            <h2>海蒂和爷爷
-                <!----></h2>
+            <h2>海蒂和爷爷</h2>
             <p>
                 <span class="person">16003</span>人想看</p>
             <p>主演: 阿努克·斯特芬,布鲁诺·甘茨,昆林·艾格匹</p>
             <p>2019-05-16上映</p></div>
             <div class="btn_pre">预售</div>
-        </li>
-        <li>
+        </li> -->
+        <li v-for="item in comingList" :key="item.id">
             <div class="pic_show">
-            <img src="/image/pic4.jpg"></div>
+            <img :src="item.img  | setWH('128.180')"></div>
             <div class="info_list">
-            <h2>一条狗的使命2
-                <!----></h2>
+            <h2>{{item.nm}}</h2>
             <p>
-                <span class="person">32699</span>人想看</p>
-            <p>主演: 丹尼斯·奎德,凯瑟琳·普雷斯科特,刘宪华</p>
-            <p>2019-05-17上映</p></div>
+                <span class="person">{{item.wish}}</span>人想看</p>
+            <p>主演: {{item.star}}</p>
+            <p>{{item.showInfo}}</p></div>
             <div class="btn_pre">预售</div>
         </li>
     </ul>
@@ -35,8 +33,16 @@ export default {
   components: {},
   data() {
     return {
-
+		comingList:[]
     }
+  },
+  mounted(){
+	  this.axios.get('/api/movieComingList?cityId=10').then((res)=>{
+		  var msg=res.data.msg;
+		  if(msg === 'ok'){
+			  this.comingList=res.data.data.comingList;
+		  }
+	  })
   }
 }
 </script>

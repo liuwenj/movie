@@ -1,7 +1,7 @@
 <template>
     <div class="cinema_body">
         <ul>
-            <li>
+            <!-- <li>
                 <div>
                 <span>保利国际影城(天安门店)</span>
                 <span class="q">
@@ -10,149 +10,23 @@
                 <span>西城区煤市街廊房头条交叉口东北角北京坊东区B1-B2层</span>
                 <span>600m</span></div>
                 <div class="card">
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
                 <div class="or">折扣卡</div>
                 <div class="or">小吃</div></div>
-            </li>
-            <li>
+            </li> -->
+            <li v-for="item in cinemas" :key="item.id">
                 <div>
-                <span>大观楼电影院</span>
-                <span class="q">
-                    <span class="price">34</span>元起</span></div>
+                    <span>{{item.nm}}</span>
+                    <span class="q">
+                        <span class="price">{{item.sellPrice}}</span>元起
+                    </span>
+                </div>
                 <div class="address">
-                <span>西城区前门大街大栅栏街36号</span>
-                <span>900m</span></div>
+                    <span>{{item.addr}}</span>
+                    <span>{{item.distance}}</span>
+                </div>
                 <div class="card">
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <div class="or">折扣卡</div>
-                <div class="or">小吃</div>
-                <!----></div>
-            </li>
-            <li>
-                <div>
-                <span>耀莱成龙影城(王府井店)</span>
-                <span class="q">
-                    <span class="price">39</span>元起</span></div>
-                <div class="address">
-                <span>东城区王府井大街301号新燕莎金街购物广场地下1层MB124</span>
-                <span>1.2km</span></div>
-                <div class="card">
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <div class="bl">退</div>
-                <!---->
-                <div class="or">折扣卡</div>
-                <div class="or">小吃</div>
-                <!----></div>
-            </li>
-            <li>
-                <div>
-                <span>传奇奢华影城</span>
-                <span class="q">
-                    <span class="price">42</span>元起</span></div>
-                <div class="address">
-                <span>东城区东打磨厂街7号新活馆B1层</span>
-                <span>1.3km</span></div>
-                <div class="card">
-                <div class="bl">改签</div>
-                <!---->
-                <!---->
-                <!---->
-                <div class="bl">退</div>
-                <!---->
-                <div class="or">折扣卡</div>
-                <div class="or">小吃</div>
-                <!----></div>
-            </li>
-            <li>
-                <div>
-                <span>横店电影城(王府井店)</span>
-                <span class="q">
-                    <span class="price">29</span>元起</span></div>
-                <div class="address">
-                <span>东城区王府井大街255号北京市百货大楼北馆8层</span>
-                <span>1.5km</span></div>
-                <div class="card">
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <div class="or">折扣卡</div>
-                <div class="or">小吃</div>
-                <!----></div>
-            </li>
-            <li>
-                <div>
-                <span>百老汇影城(apm购物中心店)</span>
-                <span class="q">
-                    <span class="price">30</span>元起</span></div>
-                <div class="address">
-                <span>东城区王府井大街138号北京apm6层</span>
-                <span>1.6km</span></div>
-                <div class="card">
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <div class="or">折扣卡</div>
-                <div class="or">小吃</div></div>
-            </li>
-            <li>
-                <div>
-                <span>百老汇影城(东方广场店)</span>
-                <span class="q">
-                    <span class="price">30</span>元起</span></div>
-                <div class="address">
-                <span>东城区东长安街1号东方广场地下1层</span>
-                <span>1.7km</span></div>
-                <div class="card">
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <div class="or">折扣卡</div>
-                <div class="or">小吃</div></div>
-            </li>
-            <li>
-                <div>
-                <span>搜秀影城</span>
-                <span class="q">
-                    <span class="price">29</span>元起</span></div>
-                <div class="address">
-                <span>东城区崇外大街40号搜秀城9层</span>
-                <span>1.9km</span></div>
-                <div class="card">
-                <div class="bl">改签</div>
-                <!---->
-                <!---->
-                <!---->
-                <div class="bl">退</div>
-                <!---->
-                <div class="or">折扣卡</div>
-                <div class="or">小吃</div>
-                <!----></div>
+                    <div v-for="(num,key) in item.tag" v-if="num === 1" :key="key" :class="key | classCard">{{key | formatCard}}</div>
+               </div>
             </li>
         </ul>
     </div>
@@ -164,8 +38,46 @@ export default {
   components: {},
   data() {
     return {
-
+        cinemas:[]
     }
+  },
+  mounted(){
+      this.axios.get('/api/cinemaList?cityId=10').then((res)=>{
+          var msg=res.data.msg;
+          if(msg === 'ok'){
+              this.cinemas=res.data.data.cinemas;
+          }
+      })
+  },
+  filters:{
+      formatCard(key){
+          var card=[
+              {key:'allowRefund',value:'改签'},
+              {key:'sell',value:'售尽'},
+              {key:'endorse',value:'退'},
+              {key:'snack',value:'小吃'}
+          ];
+          for(var i=0;i<card.length;i++){
+              if(card[i].key === key){
+                  return card[i].value;
+              }
+          }
+           return ''
+      },
+      classCard(key){
+          var card=[
+              {key:'allowRefund',value:'bl'},
+              {key:'endorse',value:'bl'},
+              {key:'sell ',value:'or'},
+              {key:'snack',value:'or'}
+          ];
+          for(var i=0;i<card.length;i++){
+              if(card[i].key === key){
+                  return card[i].value;
+              }
+          }
+           return ''
+      }
   }
 }
 </script>

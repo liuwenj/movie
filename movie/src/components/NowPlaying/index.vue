@@ -2,8 +2,8 @@
     <div class="movie_body">
         <div class="wrapper">
             <ul style="transition-duration: 0ms; transform: translate(0px, 0px) scale(1) translateZ(0px);">
-                <li class="pullDown" style="pointer-events: auto;"></li>
-                <li style="pointer-events: auto;">
+                <!-- <li class="pullDown" style="pointer-events: auto;"></li> -->
+                <!-- <li style="pointer-events: auto;">
                     <div class="pic_show">
                         <img src="/image/pic1.jpg">
                     </div>
@@ -16,18 +16,18 @@
                         <p >今天214家影院放映3275场</p>
                     </div>
                     <div class="btn_mall">购票</div>
-                </li>
-                <li style="pointer-events: auto;">
+                </li> -->
+				<li style="pointer-events: auto;" v-for="item in movieList" :key="item.id">
                     <div class="pic_show">
-                        <img src="/image/pic2.jpg">
+                        <img :src="item.img | setWH('128.180')">
                     </div>
                     <div class="info_list">
-                        <h2 >复仇者联盟4：终局之战
+                        <h2 >{{item.nm}}
                             <img src="" alt=""></h2>
                         <p >观众评
-                            <span class="grade">9.1</span></p>
-                        <p >主演: 小罗伯特·唐尼,克里斯·埃文斯,马克·鲁法洛</p>
-                        <p >今天207家影院放映1820场</p>
+                            <span class="grade">{{item.sc}}</span></p>
+                        <p >主演: {{item.star}}</p>
+                        <p >{{item.showInfo}}</p>
                     </div>
                     <div class="btn_mall">购票</div>
                 </li>
@@ -40,10 +40,18 @@
 export default {
   name: 'nowPlaying',
   components: {},
-  data() {
+  data(){
     return {
-
+		movieList:[]
     }
+  },
+  mounted(){
+	  this.axios.get('/api/movieOnInfoList?cityId=10').then((res)=>{
+		  var msg=res.data.msg;
+		  if(msg === 'ok'){
+			  this.movieList=res.data.data.movieList
+		  }
+	  })
   }
 }
 </script>
