@@ -1,29 +1,32 @@
 <template>
   <div class="movie_body">
-    <ul>
-        <!-- <li>
-            <div class="pic_show">
-            <img src="/image/pic3.jpg"></div>
-            <div class="info_list">
-            <h2>海蒂和爷爷</h2>
-            <p>
-                <span class="person">16003</span>人想看</p>
-            <p>主演: 阿努克·斯特芬,布鲁诺·甘茨,昆林·艾格匹</p>
-            <p>2019-05-16上映</p></div>
-            <div class="btn_pre">预售</div>
-        </li> -->
-        <li v-for="item in comingList" :key="item.id">
-            <div class="pic_show">
-            <img :src="item.img  | setWH('128.180')"></div>
-            <div class="info_list">
-            <h2>{{item.nm}}</h2>
-            <p>
-                <span class="person">{{item.wish}}</span>人想看</p>
-            <p>主演: {{item.star}}</p>
-            <p>{{item.showInfo}}</p></div>
-            <div class="btn_pre">预售</div>
-        </li>
-    </ul>
+	<Loading v-if="isLoading"/>
+	<Scroller v-else>
+		<ul>
+				<!-- <li>
+						<div class="pic_show">
+						<img src="/image/pic3.jpg"></div>
+						<div class="info_list">
+						<h2>海蒂和爷爷</h2>
+						<p>
+								<span class="person">16003</span>人想看</p>
+						<p>主演: 阿努克·斯特芬,布鲁诺·甘茨,昆林·艾格匹</p>
+						<p>2019-05-16上映</p></div>
+						<div class="btn_pre">预售</div>
+				</li> -->
+				<li v-for="item in comingList" :key="item.id">
+						<div class="pic_show">
+						<img :src="item.img  | setWH('128.180')"></div>
+						<div class="info_list">
+						<h2>{{item.nm}}</h2>
+						<p>
+								<span class="person">{{item.wish}}</span>人想看</p>
+						<p>主演: {{item.star}}</p>
+						<p>{{item.showInfo}}</p></div>
+						<div class="btn_pre">预售</div>
+				</li>
+		</ul>
+	</Scroller>
 </div>
 </template>
 
@@ -33,14 +36,21 @@ export default {
   components: {},
   data() {
     return {
-		comingList:[]
+		comingList:[],
+		isLoading:true,
+		prevCityId:-1
     }
   },
-  mounted(){
-	  this.axios.get('/api/movieComingList?cityId=10').then((res)=>{
+  activated(){
+	  var cityId=this.$store.state.city.id;
+	  if(this.prevCityId === cityId){return;}
+	  this.isLoading=true;
+	  this.axios.get('/api/movieComingList?cityId='+cityId).then((res)=>{
 		  var msg=res.data.msg;
 		  if(msg === 'ok'){
 			  this.comingList=res.data.data.comingList;
+			  this.isLoading=false;
+			  this.prevCityId=cityId;
 		  }
 	  })
   }

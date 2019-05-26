@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page" id="main">
       <Header title="新鲜影院"/>
       <div id="content">
         <div class="cinema_menu">
@@ -20,6 +20,7 @@
 import Header from '@/components/Header'
 import TabBar from '@/components/TabBar'
 import CiList from '@/components/CiList'
+
 export default {
   name: 'Cinema',
   components: {
@@ -27,11 +28,6 @@ export default {
     TabBar,
     CiList
   },
-  data() {
-    return {
-
-    }
-  }
 }
 </script>
 

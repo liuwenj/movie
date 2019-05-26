@@ -1,34 +1,37 @@
 <template>
     <div class="cinema_body">
-        <ul>
-            <!-- <li>
-                <div>
-                <span>保利国际影城(天安门店)</span>
-                <span class="q">
-                    <span class="price">24</span>元起</span></div>
-                <div class="address">
-                <span>西城区煤市街廊房头条交叉口东北角北京坊东区B1-B2层</span>
-                <span>600m</span></div>
-                <div class="card">
-                <div class="or">折扣卡</div>
-                <div class="or">小吃</div></div>
-            </li> -->
-            <li v-for="item in cinemas" :key="item.id">
-                <div>
-                    <span>{{item.nm}}</span>
+        <Loading v-if="isLoading" />
+        <Scroller v-else>
+            <ul>
+                <!-- <li>
+                    <div>
+                    <span>保利国际影城(天安门店)</span>
                     <span class="q">
-                        <span class="price">{{item.sellPrice}}</span>元起
-                    </span>
+                        <span class="price">24</span>元起</span></div>
+                    <div class="address">
+                    <span>西城区煤市街廊房头条交叉口东北角北京坊东区B1-B2层</span>
+                    <span>600m</span></div>
+                    <div class="card">
+                    <div class="or">折扣卡</div>
+                    <div class="or">小吃</div></div>
+                </li> -->
+                <li v-for="item in cinemas" :key="item.id">
+                    <div>
+                        <span>{{item.nm}}</span>
+                        <span class="q">
+                            <span class="price">{{item.sellPrice}}</span>元起
+                        </span>
+                    </div>
+                    <div class="address">
+                        <span>{{item.addr}}</span>
+                        <span>{{item.distance}}</span>
+                    </div>
+                    <div class="card">
+                        <div v-for="(num,key) in item.tag" v-if="num === 1" :key="key" :class="key | classCard">{{key | formatCard}}</div>
                 </div>
-                <div class="address">
-                    <span>{{item.addr}}</span>
-                    <span>{{item.distance}}</span>
-                </div>
-                <div class="card">
-                    <div v-for="(num,key) in item.tag" v-if="num === 1" :key="key" :class="key | classCard">{{key | formatCard}}</div>
-               </div>
-            </li>
-        </ul>
+                </li>
+            </ul>
+        </Scroller>
     </div>
 </template>
 
@@ -38,14 +41,22 @@ export default {
   components: {},
   data() {
     return {
-        cinemas:[]
+        cinemas:[],
+        isLoading:true,
+        prevCityId:-1
     }
   },
-  mounted(){
-      this.axios.get('/api/cinemaList?cityId=10').then((res)=>{
+  activated(){
+      var cityId=this.$store.state.city.id;console.log(cityId)
+      if(this.prevCityId === cityId){return;}
+      this.isLoading=true;
+      this.axios.get('/api/cinemaList?cityId='+cityId).then((res)=>{
+          console.log(1234)
           var msg=res.data.msg;
           if(msg === 'ok'){
               this.cinemas=res.data.data.cinemas;
+              this.isLoading=false;
+              this.prevCityId=cityId
           }
       })
   },
