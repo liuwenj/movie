@@ -20,11 +20,11 @@
 					</li> -->
 					<li class="pullDown" style="pointer-events: auto;">{{pullDown}}</li>
 					<li style="pointer-events: auto;" v-for="item in movieList" :key="item.id">
-						<div class="pic_show" @tap="handleToDetail">
+						<div class="pic_show" @tap="handleToDetail(item.id)">
 							<img :src="item.img | setWH('128.180')">
 						</div>
 						<div class="info_list">
-							<h2 >{{item.nm}}
+							<h2 @tap="handleToDetail(item.id)">{{item.nm}}
 								<img src="" alt=""></h2>
 							<p >观众评
 								<span class="grade">{{item.sc}}</span></p>
@@ -50,7 +50,7 @@ export default {
 		isLoading:true,
 		prevCityId:-1
     }
-  },
+	},
   activated(){
 		var cityId=this.$store.state.city.id;
 		if(this.prevCityId === cityId){return;}
@@ -90,8 +90,8 @@ export default {
 	  })
   },
   methods:{
-	  handleToDetail(){
-		  console.log(1111)
+	  handleToDetail(movieId){
+		 this.$router.push('/movie/detail/'+movieId)
 		},
 		handleToScroll(pos){
 			if(pos.y > 30){
