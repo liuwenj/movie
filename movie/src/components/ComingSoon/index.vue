@@ -15,14 +15,17 @@
 						<div class="btn_pre">预售</div>
 				</li> -->
 				<li v-for="item in comingList" :key="item.id">
-						<div class="pic_show">
-						<img :src="item.img  | setWH('128.180')"></div>
-						<div class="info_list">
-						<h2>{{item.nm}}</h2>
+					<div class="pic_show" @tap="handleToDetail(item.id)">
+						<img :src="item.img  | setWH('128.180')">
+					</div>
+					<div class="info_list">
+						<h2 @tap="handleToDetail(item.id)">{{item.nm}}</h2>
 						<p>
-								<span class="person">{{item.wish}}</span>人想看</p>
+							<span class="person">{{item.wish}}</span>人想看
+						</p>
 						<p>主演: {{item.star}}</p>
-						<p>{{item.showInfo}}</p></div>
+						<p>{{item.showInfo}}</p>
+					</div>
 						<div class="btn_pre">预售</div>
 				</li>
 		</ul>
@@ -53,6 +56,11 @@ export default {
 			  this.prevCityId=cityId;
 		  }
 	  })
+  },
+  methods:{
+	  handleToDetail(movieId){
+		  this.$router.push('/movie/detail/'+movieId)
+	  }
   }
 }
 </script>
